@@ -1,0 +1,132 @@
+<div class="contenedor-nosotros container-fluid py-5 px-md-5">
+  
+  <section class="seccion-identidad mb-5 pb-4">
+    <h1 class="titulo-blanco mb-3">Nuestra Identidad</h1>
+    <p class="texto-delgado-gris w-lg-75 mb-5">
+      El epicentro del fútbol competitivo y recreativo en Los Olivos. Infraestructura premium para atletas que exigen lo mejor. Nos enorgullecemos de ofrecer instalaciones de primer nivel, diseñadas meticulosamente para elevar el rendimiento y fomentar la pasión por el deporte en cada partido y entrenamiento.
+    </p>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="tarjeta-filosofia">
+          <h4 class="titulo-tarjeta-filosofia mb-3">Misión</h4>
+          <p class="texto-delgado-gris mb-0">
+            Proporcionar espacios deportivos de clase mundial que fomenten el desarrollo atlético, la competencia leal y la integración de la comunidad local. Garantizamos una experiencia de reserva y juego sin fricciones mediante tecnología de vanguardia...
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="tarjeta-filosofia">
+          <h4 class="titulo-tarjeta-filosofia mb-3">Visión</h4>
+          <p class="texto-delgado-gris mb-0">
+            Ser el referente indiscutible en infraestructura deportiva amateur y semi-profesional en toda Lima Norte, consolidando un ecosistema donde el deporte, la disciplina y la excelencia operativa convergen armónicamente...
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-ubicacion mb-5">
+    <h2 class="titulo-blanco mb-4">Ubicación</h2>
+
+    <div class="contenedor-mapa-relativo">
+      
+      <div id="mapa-nosotros" class="mapa-interactivo"></div>
+
+      <div class="tarjeta-flotante-ubicacion">
+        <p class="etiqueta-neon mb-1">Dirección Principal</p>
+        <p class="texto-blanco-fuerte mb-3">San Fernando 198, Los Olivos 15307</p>
+        
+        <button class="btn boton-verde-fluido w-100" (click)="abrirRutaGps()">
+          <i class="bi bi-geo-alt-fill me-2"></i> Cómo llegar
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="seccion-contacto mt-5">
+    <div class="row g-4">
+      
+      <div class="col-lg-4">
+        <div class="caja-oscura-panel h-100 d-flex flex-column justify-content-between">
+          
+          <div>
+            <h5 class="texto-blanco-fuerte mb-3">Línea de Atención</h5>
+            <p class="texto-delgado-gris mb-4">+51 941 577 759</p>
+            <p class="texto-delgado-gris mb-0">Lunes a Domingo: 8:00 AM - 11:00 PM</p>
+          </div>
+
+          <div class="mt-5">
+            <h5 class="texto-blanco-fuerte mb-3">Redes Sociales</h5>
+            <div class="d-flex gap-3 iconos-redes">
+              <a href="javascript:void(0)" class="circulo-red"><i class="bi bi-facebook"></i></a>
+              <a href="javascript:void(0)" class="circulo-red"><i class="bi bi-instagram"></i></a>
+              <a href="javascript:void(0)" class="circulo-red"><i class="bi bi-tiktok"></i></a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="caja-oscura-panel">
+          <h2 class="texto-blanco-fuerte mb-3">Formulario de Incidencias</h2>
+          <p class="texto-delgado-gris mb-4">
+            Utilice este formulario para reportar cualquier problema técnico, de infraestructura o de servicio que haya experimentado en nuestras instalaciones.
+          </p>
+
+          <form [formGroup]="incidenciasForm" (ngSubmit)="enviarReporte()">
+            <div class="row g-3">
+              
+              <div class="col-md-6">
+                <label class="etiqueta-form">Nombre Completo</label>
+                <input type="text" class="form-control form-oscuro" formControlName="nombre" placeholder="Ingrese su nombre">
+              </div>
+
+              <div class="col-md-6">
+                <label class="etiqueta-form">Correo Electrónico</label>
+                <input type="email" class="form-control form-oscuro" formControlName="correo" placeholder="Ingrese su correo electrónico">
+                <small class="text-danger mt-1 d-block" *ngIf="incidenciasForm.get('correo')?.invalid && incidenciasForm.get('correo')?.touched">
+                  *Ingrese un correo válido
+                </small>
+              </div>
+
+              <div class="col-md-6">
+                <label class="etiqueta-form">Tipo de Incidencia</label>
+                <select class="form-select form-oscuro" formControlName="tipo">
+                  <option value="" disabled selected>Seleccione el tipo</option>
+                  <option value="Menor">Menor</option>
+                  <option value="Medio">Medio</option>
+                  <option value="Alto">Alto</option>
+                </select>
+              </div>
+
+              <div class="col-md-6">
+                <label class="etiqueta-form">Cancha o Sede Específica</label>
+                <select class="form-select form-oscuro" formControlName="cancha">
+                  <option value="" disabled selected>Ej: Cancha 1 (Fútbol)</option>
+                  <option value="Cancha Futbol Principal">Cancha de Fútbol</option>
+                  <option value="Cancha Voley Principal">Cancha de Vóley</option>
+                </select>
+              </div>
+
+              <div class="col-12">
+                <label class="etiqueta-form">Descripción Detallada</label>
+                <textarea class="form-control form-oscuro" rows="4" formControlName="descripcion" placeholder="Describa el problema..."></textarea>
+              </div>
+
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn boton-verde-fluido px-4 py-2">Enviar Reporte</button>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,82 @@
+<div class="pantalla-registro d-flex align-items-center justify-content-center py-5">
+  
+  <a routerLink="/login" class="btn-volver">
+    <i class="bi bi-arrow-left me-2"></i> VOLVER
+  </a>
+
+  <div class="tarjeta-registro">
+    
+    <div class="text-center mb-4">
+      <h2 class="titulo-registro">Crear Cuenta</h2>
+      <p class="subtitulo-registro">Únete a Barsa Los Olivos</p>
+    </div>
+
+    <form [formGroup]="registroForm" (ngSubmit)="registrarUsuario()">
+      
+      <div class="mb-3">
+        <label class="etiqueta-form-neon">DNI</label>
+        <div class="input-group">
+          <input type="text" maxlength="8" class="form-control form-oscuro border-end-0" 
+                 formControlName="dni" placeholder="Documento de Identidad" (keypress)="soloNumeros($event)">
+          <button type="button" class="btn boton-buscar border-start-0" (click)="buscarDni()" [disabled]="registroForm.get('dni')?.invalid">
+            <i class="bi" [ngClass]="buscandoDni ? 'bi-hourglass-split' : 'bi-search'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row g-2 mb-3">
+        <div class="col-md-6">
+          <label class="etiqueta-form-neon">NOMBRES</label>
+          <input type="text" class="form-control form-oscuro" formControlName="nombres" placeholder="Nombres">
+        </div>
+        <div class="col-md-6">
+          <label class="etiqueta-form-neon">APELLIDOS</label>
+          <input type="text" class="form-control form-oscuro" formControlName="apellidos" placeholder="Apellidos">
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="etiqueta-form-neon">CORREO ELECTRÓNICO</label>
+        <input type="email" class="form-control form-oscuro" formControlName="correo" placeholder="Ingresar correo electrónico">
+      </div>
+
+      <div class="mb-3">
+        <label class="etiqueta-form-neon">CONTRASEÑA</label>
+        <div class="input-group">
+          <input [type]="mostrarPassword ? 'text' : 'password'" class="form-control form-oscuro border-end-0" 
+                 formControlName="password" placeholder="••••••••">
+          <button type="button" class="btn boton-ojo border-start-0" (click)="togglePassword()">
+            <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <small class="text-danger mt-1 d-block" *ngIf="registroForm.get('password')?.hasError('pattern') && registroForm.get('password')?.touched">
+          * Mín. 8 caracteres, 1 mayúscula y 1 símbolo.
+        </small>
+      </div>
+
+      <div class="mb-4">
+        <label class="etiqueta-form-neon">CONFIRMAR CONTRASEÑA</label>
+        <div class="input-group">
+          <input [type]="mostrarConfirmar ? 'text' : 'password'" class="form-control form-oscuro border-end-0" 
+                 formControlName="confirmPassword" placeholder="••••••••">
+          <button type="button" class="btn boton-ojo border-start-0" (click)="toggleConfirmar()">
+            <i class="bi" [ngClass]="mostrarConfirmar ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <small class="text-danger mt-1 d-block" *ngIf="registroForm.hasError('noCoincide') && registroForm.get('confirmPassword')?.touched">
+          * Las contraseñas no coinciden.
+        </small>
+      </div>
+
+      <button type="submit" class="btn boton-verde-fluido w-100" [disabled]="registroForm.invalid">
+        REGISTRARSE
+      </button>
+
+    </form>
+
+    <p class="texto-footer text-center mt-4 mb-0">
+      ¿Ya tienes una cuenta? <a routerLink="/login" class="link-verde">Iniciar Sesión</a>
+    </p>
+
+  </div>
+</div>

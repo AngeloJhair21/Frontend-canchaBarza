@@ -1,0 +1,298 @@
+/* VARIABLES */
+$color-verde-neon: #ccff00;
+$color-fondo: #121212;
+$color-card: #1a1a1a;
+$color-texto-gris: #888;
+$sidebar-width: 280px;
+
+.dashboard-container { background-color: $color-fondo; min-height: 100vh; }
+
+/* === SIDEBAR (Igual a perfil y reservas) === */
+.sidebar-usuario {
+  width: $sidebar-width; background-color: #0d0d0d; height: 100vh; position: sticky; top: 0;
+  padding: 3rem 1.5rem; border-right: 1px solid rgba(255, 255, 255, 0.05);
+  .brand-perfil h3 { font-size: 1.8rem; letter-spacing: -1px; }
+  .nav-item {
+    margin-bottom: 0.5rem;
+    a { color: #888; text-decoration: none; padding: 0.8rem 1rem; display: block; border-radius: 8px; font-weight: 400; transition: all 0.3s; i { font-size: 1.1rem; } &:hover { color: #fff; background: rgba(255,255,255,0.05); } }
+    &.active a { background-color: rgba(204, 255, 0, 0.1); color: $color-verde-neon; font-weight: 600; }
+  }
+  .link-salir { color: #888 !important; cursor: pointer; &:hover { color: #ff4444 !important; background: rgba(255, 68, 68, 0.05) !important; } }
+}
+
+/* === TIPOGRAFÍAS BASE === */
+.titulo-seccion { color: #fff; font-weight: 700; font-size: 2.2rem; letter-spacing: -0.5px; }
+.texto-delgado-gris { color: $color-texto-gris; font-weight: 300; font-size: 0.95rem; line-height: 1.5; }
+.texto-blanco-fuerte { color: #fff; font-weight: 600; font-size: 1.1rem; letter-spacing: 0.2px; }
+.texto-neon { color: $color-verde-neon; }
+
+/* === NAVEGACIÓN DE PESTAÑAS (TABS) === */
+.tabs-reservas {
+  display: flex;
+  gap: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  padding-bottom: 0;
+  
+  .tab-btn {
+    background: none;
+    border: none;
+    color: $color-texto-gris;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0 0.5rem 1rem 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 2px solid transparent;
+    
+    &:hover { color: #fff; }
+    
+    &.active {
+      color: $color-verde-neon;
+      border-bottom: 2px solid $color-verde-neon;
+    }
+  }
+}
+
+/* === TARJETAS DE HISTORIAL === */
+.tarjeta-historial {
+  background-color: $color-card;
+  border-radius: 12px;
+  padding: 1.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Textos internos de la tarjeta */
+.info-cancha p {
+  color: #999;
+  font-size: 0.9rem;
+  font-weight: 400;
+}
+
+.divisor-sutil {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* === BADGES DE ESTADO === */
+.badge-estado {
+  display: inline-block;
+  padding: 0.35rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  
+  &.badge-aprobada {
+    color: $color-verde-neon;
+    background-color: rgba(204, 255, 0, 0.05);
+    border: 1px solid rgba(204, 255, 0, 0.15);
+  }
+  
+  &.badge-pendiente {
+    color: #ffd700; /* Amarillo dorado */
+    background-color: rgba(255, 215, 0, 0.05);
+    border: 1px solid rgba(255, 215, 0, 0.15);
+  }
+  
+  &.badge-terminada {
+    color: #888;
+    background-color: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* === FOOTER DE LA TARJETA === */
+.footer-tarjeta {
+  .metodo-pago-texto {
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .punto-pago {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #fff; /* Por defecto tarjeta (blanco) */
+    
+    &.punto-yape {
+      background-color: #9420b9; /* Morado Yape */
+      box-shadow: 0 0 5px rgba(148, 32, 185, 0.5);
+    }
+  }
+  
+  .link-detalles {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: color 0.2s;
+    
+    &:hover { color: $color-verde-neon; }
+  }
+}
+
+/* Animaciones */
+.animacion-aparecer { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* Responsivo */
+@media (max-width: 992px) {
+  .dashboard-container { flex-direction: column; }
+  .sidebar-usuario { width: 100%; height: auto; position: relative; padding: 2rem; }
+  .tabs-reservas { overflow-x: auto; white-space: nowrap; padding-bottom: 5px; }
+}
+/* =========================================
+   MODAL DE DETALLES DE RESERVA
+   ========================================= */
+.modal-overlay { 
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+  background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(4px); z-index: 2000; 
+}
+
+.modal-detalles-reserva {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.6);
+  border-radius: 12px;
+  max-height: 90vh;
+  overflow-y: auto; /* Permite hacer scroll si la pantalla es muy chica */
+  
+  /* Escondemos el scrollbar nativo para que se vea limpio */
+  &::-webkit-scrollbar { width: 5px; }
+  &::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+}
+
+/* Modificamos la etiqueta neón para que sea gris/blanca según tu diseño */
+.etiqueta-form-neon.text-white {
+  color: #888 !important;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+}
+
+/* Cajas de texto de solo lectura */
+.form-comentario {
+  background-color: #121212 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  color: #888 !important;
+  font-size: 0.85rem;
+  resize: none; /* Evita que el usuario estire la caja */
+  padding: 1rem;
+  
+  &.form-admin {
+    border-color: rgba(204, 255, 0, 0.1) !important;
+    color: #fff !important;
+    font-style: italic;
+  }
+  
+  &:focus { box-shadow: none !important; }
+}
+
+/* Caja de calificación del Admin */
+.caja-estrellas {
+  background-color: #121212;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  
+  .estrellas i {
+    font-size: 1.1rem;
+  }
+}
+
+/* Caja de texto editable */
+.form-comentario.editable {
+  cursor: text;
+  transition: all 0.3s ease;
+  &:focus { 
+    border-color: $color-verde-neon !important; 
+    box-shadow: 0 0 8px rgba(204, 255, 0, 0.2) !important; 
+    color: #fff !important; 
+  }
+}
+
+/* Botón pequeño de guardar comentario */
+.btn-outline-neon {
+  border: 1px solid $color-verde-neon; 
+  color: $color-verde-neon; 
+  background: transparent; 
+  font-size: 0.7rem; 
+  font-weight: 600; 
+  border-radius: 4px;
+  transition: 0.3s;
+  &:hover { background: rgba(204, 255, 0, 0.15); color: #fff; }
+}
+
+/* Botón de Cancelar con Penalidad */
+.btn-peligro {
+  background-color: rgba(255, 68, 68, 0.08); 
+  border: 1px solid rgba(255, 68, 68, 0.4); 
+  color: #ff4444; 
+  transition: 0.3s;
+  line-height: 1.2;
+  
+  span { font-size: 0.9rem; font-weight: 700; }
+  small { font-size: 0.65rem; opacity: 0.8; }
+  
+  &:hover { 
+    background-color: #ff4444; 
+    color: #fff; 
+    border-color: #ff4444;
+  }
+}
+
+/* Color neón para el precio en tiempo real */
+.text-neon { color: $color-verde-neon !important; }
+
+/* Botones para Tarjeta / Yape en el modal de pago */
+.btn-metodo-pago {
+  background-color: #121212; border: 1px solid rgba(255, 255, 255, 0.1); color: #888;
+  padding: 0.8rem; border-radius: 8px; font-size: 0.85rem; font-weight: 500; transition: all 0.3s;
+  &:hover { border-color: rgba(255, 255, 255, 0.3); color: #fff; }
+  &.activa { background-color: rgba(204, 255, 0, 0.05); border-color: $color-verde-neon; color: $color-verde-neon; font-weight: 600; }
+}
+
+/* Inputs del pago (Iguales a los de la reserva) */
+.form-pago {
+  background-color: #121212 !important; border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important; padding: 0.7rem 1rem; border-radius: 6px; font-size: 0.85rem;
+  &::placeholder { color: #444; }
+  &:focus { box-shadow: none !important; border-color: $color-verde-neon !important; }
+}
+
+/* Interruptores (Switches) estilo Neón para los Extras */
+.switch-neon:checked {
+  background-color: $color-verde-neon !important;
+  border-color: $color-verde-neon !important;
+}
+.switch-neon:focus {
+  box-shadow: 0 0 5px rgba(204, 255, 0, 0.5) !important;
+}
+
+/* Contenedor del código QR para Yape */
+.qr-placeholder {
+  width: 160px;
+  height: 160px;
+  margin: 0 auto;
+  background-color: #fff;
+  border-radius: 12px;
+  display: flex; 
+  align-items: center; 
+  justify-content: center;
+  overflow: hidden; 
+  border: 2px dashed rgba(204, 255, 0, 0.5); 
+  padding: 5px; 
+  
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    border-radius: 8px;
+  }
+}

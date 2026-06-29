@@ -1,0 +1,282 @@
+<div class="dashboard-container d-flex">
+  
+  <aside class="sidebar-usuario d-flex flex-column justify-content-between">
+    <div>
+      <div class="brand-perfil mb-5">
+        <h3 class="texto-neon fw-bold">Barsa</h3>
+      </div>
+      <nav class="menu-navegacion">
+        <ul class="list-unstyled">
+          <li class="nav-item">
+            <a routerLink="/perfil"><i class="bi bi-person-fill me-3"></i> Mi perfil</a>
+          </li>
+          <li class="nav-item active">
+            <a routerLink="/perfil-reservas"><i class="bi bi-calendar-event me-3"></i> Reservar cancha</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/mis-reservas"><i class="bi bi-list-stars me-3"></i> Mis reservas</a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)"><i class="bi bi-chat-dots me-3"></i> Chat Soporte</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="logout-section">
+      <a routerLink="/inicio" class="nav-item link-salir"><i class="bi bi-box-arrow-left me-3"></i> Salir</a>
+    </div>
+  </aside>
+
+  <main class="contenido-reservas flex-grow-1 p-4 p-md-5">
+    <header class="mb-5">
+      <h1 class="titulo-seccion">Reservar Cancha</h1>
+      <p class="texto-delgado-gris">Configura los detalles de tu próximo encuentro deportivo. Contamos con instalaciones de primer nivel iluminadas para partidos nocturnos.</p>
+    </header>
+
+    <div class="row g-4">
+      
+      <div class="col-xl-8">
+        
+        <div class="row g-4 mb-4">
+          <div class="col-md-6 animacion-aparecer" style="animation-delay: 0.1s;">
+            <div class="caja-oscura h-100 p-4 d-flex flex-column">
+              <div class="d-flex justify-content-between align-items-center mb-4 px-2">
+                <button class="btn btn-dark btn-sm p-2 bg-dark border-0 rounded-2" (click)="cambiarMes(-1)"><i class="bi bi-chevron-left text-white"></i></button>
+                <h5 class="text-white fw-bold mb-0 text-capitalize" style="font-size: 1.1rem; letter-spacing: 0.5px;">{{ nombreMesActual() }}</h5>
+                <button class="btn btn-dark btn-sm p-2 bg-dark border-0 rounded-2" (click)="cambiarMes(1)"><i class="bi bi-chevron-right text-white"></i></button>
+              </div>
+              <div class="calendario-grid flex-grow-1">
+                <div class="dia-semana" *ngFor="let d of diasSemana">{{ d }}</div>
+                <div class="dia-numero" 
+                     *ngFor="let dia of diasCalendario"
+                     [class.inactivo]="dia.inactivo"
+                     [class.activo]="esDiaSeleccionado(dia)"
+                     (click)="seleccionarDiaCalendario(dia)">
+                  <span class="num-texto" *ngIf="dia.valor">{{ dia.valor }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6 animacion-aparecer" style="animation-delay: 0.2s;">
+            <div class="caja-oscura h-100 p-0 d-flex flex-column">
+              <div class="p-4 flex-grow-1 d-flex flex-column justify-content-between">
+                
+                <div>
+                  <label class="etiqueta-form-neon mb-3">Horario</label>
+                  <div class="reloj-caja">
+                    <div class="reloj-header">
+                      <span>{{ horasVisibles[1] }}:{{ minutosVisibles[1] }} {{ periodosVisibles[1] }}</span>
+                      <i class="bi bi-clock"></i>
+                    </div>
+                    
+                    <div class="ruleta-container">
+                      <div class="ruleta-headers">
+                        <span>HOUR</span><span>MINUTE</span><span>AM/PM</span>
+                      </div>
+                      
+                      <div class="ruleta-grid">
+                        <div class="ruleta-columna">
+                          <div class="ruleta-item interactivo" (click)="moverHora(-1)">{{ horasVisibles[0] }}</div>
+                          <div class="ruleta-item activo">{{ horasVisibles[1] }}</div>
+                          <div class="ruleta-item interactivo" (click)="moverHora(1)">{{ horasVisibles[2] }}</div>
+                        </div>
+                        <div class="ruleta-columna">
+                          <div class="ruleta-item interactivo" (click)="moverMinuto(-1)">{{ minutosVisibles[0] }}</div>
+                          <div class="ruleta-item activo">{{ minutosVisibles[1] }}</div>
+                          <div class="ruleta-item interactivo" (click)="moverMinuto(1)">{{ minutosVisibles[2] }}</div>
+                        </div>
+                        <div class="ruleta-columna">
+                          <div class="ruleta-item interactivo" (click)="setPeriodo(0)">{{ periodosVisibles[0] }}</div>
+                          <div class="ruleta-item activo">{{ periodosVisibles[1] }}</div>
+                          <div class="ruleta-item interactivo" (click)="setPeriodo(1)">{{ periodosVisibles[2] }}</div>
+                        </div>
+                        
+                        <div class="ruleta-selector"></div>
+                      </div>
+                      
+                      <div class="reloj-footer d-flex gap-2 mt-4">
+                        <button class="btn btn-dark btn-sm flex-grow-1 py-2 rounded-3">Cancelar</button>
+                        <button class="btn boton-verde-fluido btn-sm flex-grow-1 py-2 rounded-3" (click)="verificarRuleta()">Verificar</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                  <span class="texto-delgado-gris small">Duración:</span>
+                  <select class="form-select select-mini" [(ngModel)]="duracion" (change)="calcularTotal()">
+                    <option *ngFor="let d of duracionesDisponibles" [value]="d.valor">{{ d.label }}</option>
+                  </select>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="caja-oscura animacion-aparecer mb-4" style="animation-delay: 0.3s;">
+          <label class="etiqueta-form-neon mb-3">Elige tu Deporte</label>
+          <div class="row g-3">
+            <div class="col-6">
+              <div class="tarjeta-deporte" [class.activa]="deporte === 'FUTBOL'" (click)="deporte = 'FUTBOL'; calcularTotal()">
+                <i class="bi bi-dribbble me-2"></i> FÚTBOL
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="tarjeta-deporte" [class.activa]="deporte === 'VOLEY'" (click)="deporte = 'VOLEY'; calcularTotal()">
+                <i class="bi bi-circle me-2"></i> VÓLEY
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="caja-oscura animacion-aparecer mb-4" style="animation-delay: 0.4s;">
+          <label class="etiqueta-form-neon mb-3">Servicios Adicionales (S/ 5.00 c/u)</label>
+          <div class="d-flex flex-wrap gap-4">
+            <div class="d-flex align-items-center gap-2">
+              <span class="texto-blanco-fuerte small">Chalecos</span>
+              <div class="form-check form-switch custom-switch m-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="extras.chalecos" (change)="calcularTotal()">
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="texto-blanco-fuerte small">Balón</span>
+              <div class="form-check form-switch custom-switch m-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="extras.balon" (change)="calcularTotal()">
+              </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+              <span class="texto-blanco-fuerte small">Banderines</span>
+              <div class="form-check form-switch custom-switch m-0">
+                <input class="form-check-input" type="checkbox" [(ngModel)]="extras.banderines" (change)="calcularTotal()">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-xl-4">
+        <div class="ticket-resumen animacion-aparecer" *ngIf="!reservaEnProceso">
+          <h4 class="text-white fw-bold mb-4">Resumen de Reserva</h4>
+          <div class="d-flex justify-content-between mb-2"><span class="texto-delgado-gris small">Deporte:</span><span class="text-white small fw-bold">{{ deporte }}</span></div>
+          <div class="d-flex justify-content-between mb-2"><span class="texto-delgado-gris small">Fecha:</span><span class="text-white small fw-bold">{{ fechaSeleccionada || '--' }}</span></div>
+          <div class="d-flex justify-content-between mb-2"><span class="texto-delgado-gris small">Hora:</span><span class="text-white small fw-bold">{{ horaSeleccionada || '--' }}</span></div>
+          <div class="d-flex justify-content-between mb-2"><span class="texto-delgado-gris small">Duración:</span><span class="text-white small fw-bold">{{ duracion }} min</span></div>
+          
+          <div class="border-top border-dark my-4"></div>
+
+          <p class="texto-neon fw-bold mb-1" style="font-size: 0.8rem;">TOTAL A PAGAR</p>
+          <h2 class="text-white fw-bold mb-4">S/ {{ precioTotal }}.00</h2>
+
+          <button class="btn boton-verde-fluido w-100 py-3" [disabled]="!fechaSeleccionada || !horaSeleccionada" (click)="iniciarReserva()">
+            CONFIRMAR RESERVA
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay d-flex align-items-center justify-content-center" *ngIf="reservaEnProceso">
+  <div class="caja-oscura p-4 p-md-5 animacion-aparecer modal-pago" style="max-width: 450px; width: 95%; position: relative;">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div class="badge-temporizador">
+        <i class="bi bi-stopwatch me-1"></i> {{ minutosMostrados }}:{{ segundosMostrados }}
+      </div>
+      <button class="btn btn-enlace text-danger p-0" style="font-size: 0.85rem;" (click)="cancelarReserva()">Cancelar</button>
+    </div>
+
+    <h2 class="text-white fw-bold text-center mb-4" style="font-size: 1.6rem;">Confirmar Pago</h2>
+
+    <div class="d-flex gap-2 mb-4">
+      <button class="btn btn-metodo-pago flex-grow-1" [class.activa]="metodoPago === 'TARJETA'" (click)="metodoPago = 'TARJETA'">
+        <i class="bi bi-credit-card-2-front me-2"></i> Tarjeta
+      </button>
+      <button class="btn btn-metodo-pago flex-grow-1" [class.activa]="metodoPago === 'YAPE'" (click)="metodoPago = 'YAPE'">
+        <i class="bi bi-phone me-2"></i> Yape / Plin
+      </button>
+    </div>
+
+    <!-- FORMULARIO TARJETA -->
+    <div *ngIf="metodoPago === 'TARJETA'" class="animacion-aparecer">
+      <div class="mb-3">
+        <label class="etiqueta-form-neon mb-2">Nombre del Banco</label>
+        <input type="text" class="form-control form-pago" placeholder="Ej: BCP, BBVA, Interbank"
+               [(ngModel)]="datosPago.banco" (input)="validarLetras('banco', $event)">
+      </div>
+      <div class="mb-3">
+        <label class="etiqueta-form-neon mb-2">Nombre del Titular</label>
+        <input type="text" class="form-control form-pago" placeholder="Tal como aparece en la tarjeta"
+               [(ngModel)]="datosPago.titular" (input)="validarLetras('titular', $event)">
+      </div>
+      <div class="mb-3">
+        <label class="etiqueta-form-neon mb-2">Número de Tarjeta</label>
+        <!-- maxlenght a 19 para permitir los espacios -->
+        <input type="text" class="form-control form-pago" placeholder="0000 0000 0000 0000" maxlength="19"
+               [(ngModel)]="datosPago.tarjeta" (input)="formatearTarjeta($event)">
+      </div>
+      <div class="row g-3 mb-4">
+        <div class="col-6">
+          <label class="etiqueta-form-neon mb-2">Caducidad</label>
+          <input type="text" class="form-control form-pago" placeholder="MM/AA" maxlength="5"
+                 [(ngModel)]="datosPago.caducidad" (input)="formatearCaducidad($event)">
+        </div>
+        <div class="col-6">
+          <label class="etiqueta-form-neon mb-2">CVV</label>
+          <input type="password" class="form-control form-pago" placeholder="***" maxlength="4"
+                 [(ngModel)]="datosPago.cvv" (input)="formatearNumeros('cvv', 4, $event)">
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA YAPE -->
+    <div *ngIf="metodoPago === 'YAPE'" class="animacion-aparecer text-center py-3">
+      
+      <!-- AQUÍ VA TU IMAGEN REAL -->
+      <div class="qr-placeholder mb-3">
+        <img src="imagenes/qr-yape" alt="Código QR Yape">
+      </div>
+      
+      <p class="texto-blanco-fuerte mb-1">Escanea el QR o yapea al:</p>
+      <h3 class="texto-neon fw-bold mb-4">941 577 759</h3>
+      
+      <div class="text-start mb-4">
+        <label class="etiqueta-form-neon mb-2">Número de Operación</label>
+        <input type="text" class="form-control form-pago text-center" placeholder="Ingresa los 6 dígitos de tu voucher" maxlength="8"
+               [(ngModel)]="datosPago.operacionYape" (input)="formatearNumeros('operacionYape', 8, $event)">
+      </div>
+    </div>
+
+    <div class="border-top border-dark my-4"></div>
+
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <p class="texto-delgado-gris small mb-1">MONTO TOTAL</p>
+        <h2 class="texto-neon fw-bold mb-0">S/ {{ precioTotal }}.00</h2>
+      </div>
+      <div class="text-end">
+        <p class="texto-delgado-gris small mb-1">ID de Transacción</p>
+        <p class="text-white small mb-0">{{ idTransaccion }}</p>
+      </div>
+    </div>
+
+    <button class="btn boton-verde-fluido w-100 py-3 mb-3" (click)="pagar()">Confirmar Pago</button>
+    <p class="text-center texto-delgado-gris mb-0" style="font-size: 0.7rem;">
+      <i class="bi bi-lock-fill me-1"></i> Pago Encriptado y Seguro
+    </p>
+
+  </div>
+</div>
+
+<div class="modal-overlay d-flex align-items-center justify-content-center" *ngIf="mostrarModalMensaje">
+  <div class="caja-oscura text-center p-5 animacion-aparecer" style="max-width: 400px; width: 90%; position: relative; z-index: 2001;">
+    <div class="mb-4"><i class="bi {{ iconoModal }} {{ colorIcono }}" style="font-size: 4rem;"></i></div>
+    <h3 class="text-white fw-bold mb-3">{{ tituloModal }}</h3>
+    <p class="texto-delgado-gris mb-5">{{ textoModal }}</p>
+    <button type="button" class="btn boton-verde-fluido w-100" (click)="cerrarAlerta()">Aceptar</button>
+  </div>
+</div>

@@ -1,0 +1,229 @@
+<div class="dashboard-container d-flex">
+
+  <aside class="sidebar-usuario d-flex flex-column justify-content-between">
+    <div>
+      <div class="brand-perfil mb-5">
+        <h3 class="texto-neon fw-bold">Barsa</h3>
+      </div>
+
+      <nav class="menu-navegacion">
+        <ul class="list-unstyled">
+          <li class="nav-item">
+            <a routerLink="/perfil"><i class="bi bi-person-fill me-3"></i> Mi perfil</a>
+          </li>
+
+          <li class="nav-item">
+            <a routerLink="/perfil-reservas"><i class="bi bi-calendar-event me-3"></i> Reservar cancha</a>
+          </li>
+
+          <li class="nav-item">
+            <a routerLink="/mis-reservas"><i class="bi bi-list-stars me-3"></i> Mis reservas</a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)"><i class="bi bi-chat-dots me-3"></i> Chat Soporte</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="logout-section">
+      <a (click)="cerrarSesion()" routerLink="/inicio" class="nav-item link-salir">
+        <i class="bi bi-box-arrow-left me-3"></i> Salir
+      </a>
+    </div>
+  </aside>
+
+  <main class="contenido-perfil flex-grow-1">
+
+    <header class="d-flex justify-content-between align-items-center mb-5">
+      <div>
+        <h1 class="titulo-seccion">Mi Perfil</h1>
+        <p class="texto-delgado-gris">Gestiona tu información personal y preferencias.</p>
+      </div>
+
+      <button class="btn btn-outline-light btn-editar px-4" (click)="abrirModal()">
+        <i class="bi bi-pencil me-2"></i> Editar Perfil
+      </button>
+
+    </header>
+
+    <div class="caja-oscura-panel mb-5 animacion-aparecer">
+      <div class="row align-items-center">
+        <div class="col">
+          <h2 class="nombre-usuario mb-1">{{ usuario.nombre }}</h2>
+          <p class="correo-usuario mb-3">{{ usuario.correo }}</p>
+
+          <div class="row info-detalles g-4">
+            <div class="col-md-4">
+              <span class="etiqueta-mini">DNI</span>
+              <p class="valor-mini">{{ usuario.dni }}</p>
+            </div>
+            <div class="col-md-4">
+              <span class="etiqueta-mini">TELÉFONO</span>
+              <p class="valor-mini">{{ usuario.telefono }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="seccion-preferencias mt-5">
+      <h5 class="texto-blanco-fuerte mb-4">Preferencias de Cuenta</h5>
+
+      <div class="caja-oscura-panel py-3">
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom border-dark">
+          <div>
+            <h6 class="mb-1 text-white">Notificaciones Push</h6>
+            <p class="texto-delgado-gris mb-0 small">Recibe alertas sobre tus reservas y promociones.</p>
+          </div>
+          <div class="form-check form-switch custom-switch">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="usuario.notificaciones">
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3">
+          <div>
+            <h6 class="mb-1 text-white">Boletín Informativo</h6>
+            <p class="texto-delgado-gris mb-0 small">Novedades y eventos en Barsa Los Olivos.</p>
+          </div>
+          <div class="form-check form-switch custom-switch">
+            <input class="form-check-input" type="checkbox" [(ngModel)]="usuario.boletin">
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+
+<div class="modal-overlay d-flex align-items-center justify-content-center" *ngIf="mostrarModalEdit">
+
+  <div class="modal-oscuro p-4 p-md-5 animacion-aparecer">
+
+    <div *ngIf="vistaModal === 'principal'">
+      <div class="text-center mb-4">
+        <h2 class="titulo-modal">Editar Perfil</h2>
+        <p class="subtitulo-modal">Actualiza tus datos de contacto y seguridad.</p>
+      </div>
+
+      <form [formGroup]="perfilForm">
+        <div class="mb-3">
+          <label class="etiqueta-form-neon">Correo electronico</label>
+          <div class="input-group">
+            <input type="email" class="form-control form-oscuro border-end-0" formControlName="correo">
+            <button type="button" class="btn boton-verificar border-start-0"
+              (click)="iniciarVerificacion('correo')">Verificar</button>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="etiqueta-form-neon">Telefono</label>
+          <div class="input-group">
+            <input type="text" class="form-control form-oscuro border-end-0" formControlName="telefono">
+            <button type="button" class="btn boton-verificar border-start-0"
+              (click)="iniciarVerificacion('telefono')">Verificar</button>
+          </div>
+        </div>
+
+        <div class="mb-4 border-top border-dark pt-4">
+          <label class="etiqueta-form-neon mb-2">SEGURIDAD</label>
+          <button type="button" class="btn btn-outline-light w-100 text-start px-3 py-2 btn-delgado"
+            (click)="iniciarVerificacion('password')">
+            <i class="bi bi-shield-lock me-2"></i> Cambiar Contraseña
+          </button>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <button type="button" class="btn text-secondary btn-delgado" (click)="cerrarModal()">Cancelar</button>
+          <button type="button" class="btn boton-verde-fluido px-4" (click)="guardarCambiosFinales()">GUARDAR
+            CAMBIOS</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="vistaModal === 'verificando-codigo'" class="text-center">
+      <h2 class="titulo-modal mb-2">Verificar Código</h2>
+      <p class="subtitulo-modal mb-4">
+        Ingresa el código de 5 dígitos enviado a tu
+        <strong class="text-white">{{ tipoVerificacion === 'telefono' ? 'SMS' : 'Correo' }}</strong>.
+      </p>
+
+      <form [formGroup]="codigoForm">
+        <div class="d-flex justify-content-center gap-2 mb-4">
+          <input #d1 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d1"
+            (keyup)="moverFoco($event, d2, null)">
+          <input #d2 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d2"
+            (keyup)="moverFoco($event, d3, d1)">
+          <input #d3 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d3"
+            (keyup)="moverFoco($event, d4, d2)">
+          <input #d4 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d4"
+            (keyup)="moverFoco($event, d5, d3)">
+          <input #d5 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d5"
+            (keyup)="moverFoco($event, null, d4)">
+        </div>
+
+        <div class="d-flex justify-content-between mt-5">
+          <button type="button" class="btn text-secondary btn-delgado"
+            (click)="vistaModal = 'principal'">Volver</button>
+          <button type="button" class="btn boton-verde-fluido px-4" (click)="verificarCodigo()"
+            [disabled]="codigoForm.invalid">VERIFICAR CÓDIGO</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="vistaModal === 'nueva-clave'">
+      <div class="text-center mb-4">
+        <h2 class="titulo-modal">Nueva Contraseña</h2>
+        <p class="subtitulo-modal">Crea una contraseña segura.</p>
+      </div>
+
+      <form [formGroup]="claveForm" (ngSubmit)="guardarNuevaClave()">
+        <div class="mb-3">
+          <label class="etiqueta-form-neon">NUEVA CONTRASEÑA</label>
+          <div class="input-group">
+            <input [type]="mostrarClave ? 'text' : 'password'" class="form-control form-oscuro border-end-0"
+              formControlName="nuevaPassword">
+            <button type="button" class="btn boton-ojo border-start-0" (click)="toggleClave()"><i class="bi"
+                [ngClass]="mostrarClave ? 'bi-eye-slash' : 'bi-eye'"></i></button>
+          </div>
+          <small class="text-danger mt-1 d-block"
+            *ngIf="claveForm.get('nuevaPassword')?.hasError('pattern') && claveForm.get('nuevaPassword')?.touched">
+            * Mín. 8 caracteres, 1 mayúscula y 1 símbolo (!@#$%).
+          </small>
+        </div>
+
+        <div class="mb-4">
+          <label class="etiqueta-form-neon">CONFIRMAR CONTRASEÑA</label>
+          <div class="input-group">
+            <input [type]="mostrarConfirmarClave ? 'text' : 'password'" class="form-control form-oscuro border-end-0"
+              formControlName="confirmarPassword">
+            <button type="button" class="btn boton-ojo border-start-0" (click)="toggleConfirmarClave()"><i class="bi"
+                [ngClass]="mostrarConfirmarClave ? 'bi-eye-slash' : 'bi-eye'"></i></button>
+          </div>
+          <small class="text-danger mt-1 d-block"
+            *ngIf="claveForm.hasError('noCoincide') && claveForm.get('confirmarPassword')?.touched">
+            * Las contraseñas no coinciden.
+          </small>
+        </div>
+
+        <div class="d-flex justify-content-end gap-3 mt-4">
+          <button type="button" class="btn text-secondary btn-delgado"
+            (click)="vistaModal = 'principal'">Cancelar</button>
+          <button type="submit" class="btn boton-verde-fluido px-4"
+            [disabled]="claveForm.invalid || claveForm.hasError('noCoincide')">GUARDAR CONTRASEÑA</button>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="vistaModal === 'exito'" class="text-center py-4 animacion-aparecer">
+      <div class="mb-4">
+        <i class="bi bi-check-circle-fill texto-neon" style="font-size: 5rem;"></i>
+      </div>
+      <h2 class="titulo-modal">Listo</h2>
+      <p class="subtitulo-modal mt-3 mb-5 px-3">{{ mensajeExito }}</p>
+      <button type="button" class="btn boton-verde-fluido w-100" (click)="cerrarModal()">CONTINUAR</button>
+    </div>
+
+  </div>
+</div>

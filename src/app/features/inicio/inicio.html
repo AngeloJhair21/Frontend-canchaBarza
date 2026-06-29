@@ -1,0 +1,204 @@
+<div class="contenedor-inicio">
+  <header class="seccion-hero">
+    
+    <div id="carruselFondo" class="carousel slide carrusel-absoluto" data-bs-ride="carousel" data-bs-pause="false">
+      <div class="carousel-inner capa-oscura">
+        <div class="carousel-item active">
+          <img src="imagenes/carrusel1.jpg" class="d-block w-100 imagen-fondo" alt="Cancha 1">
+        </div>
+        <div class="carousel-item">
+          <img src="imagenes/carrusel2.jpg" class="d-block w-100 imagen-fondo" alt="Cancha 2">
+        </div>
+        <div class="carousel-item">
+          <img src="imagenes/carrusel3.jpg" class="d-block w-100 imagen-fondo" alt="Cancha 3">
+        </div>
+        <div class="carousel-item">
+          <img src="imagenes/carrusel4.jpg" class="d-block w-100 imagen-fondo" alt="Cancha 4">
+        </div>
+        <div class="carousel-item">
+          <img src="imagenes/carrusel5.jpg" class="d-block w-100 imagen-fondo" alt="Cancha 5">
+        </div>
+        <div class="carousel-item">
+          <img src="imagenes/carrusel6.jpg" class="d-block w-100 imagen-fondo" alt="Cancha 6">
+        </div>
+      </div>
+    </div>
+
+    <div class="contenido-superpuesto container">
+      <div class="cuadro-texto">
+        <span class="etiqueta-premium">Canchas de buena calidad</span>
+        
+        <h1 class="titulo-principal">
+          Tu partido <br>
+          <span class="texto-verde">comienza aquí.</span>
+        </h1>
+        
+        <p class="subtitulo-delgado">
+          Experimenta el fútbol en canchas sintéticas de última generación.<br>
+          Iluminación profesional y un ambiente diseñado para la victoria.
+        </p>
+        
+        <button class="btn boton-verde-brillante" routerLink="/reservar">
+          Reservar Cancha <span class="flecha">→</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="controles-carrusel">
+      <button class="btn-control" type="button" data-bs-target="#carruselFondo" data-bs-slide="prev">
+        <span>&lt;</span>
+      </button>
+      <button class="btn-control" type="button" data-bs-target="#carruselFondo" data-bs-slide="next">
+        <span>&gt;</span>
+      </button>
+    </div>
+
+  </header>
+  <section class="seccion-beneficios container py-5">
+    
+    <div class="text-center mb-5">
+      <h2 class="titulo-seccion">Eficiencia en cada paso</h2>
+      <p class="subtitulo-seccion">Diseñado para que te enfoques en el juego, no en la logística.</p>
+    </div>
+
+    <div class="row g-4 justify-content-center">
+      
+      <div class="col-md-4">
+        <div class="tarjeta-beneficio">
+          <div class="contenedor-icono">
+            <i class="bi bi-clock"></i> </div>
+          <h3 class="titulo-tarjeta">Reserva a cualquier hora</h3>
+          <p class="texto-tarjeta">
+            Disponibilidad en tiempo real. Selecciona tu horario ideal en segundos desde cualquier dispositivo.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tarjeta-beneficio">
+          <div class="contenedor-icono">
+            <i class="bi bi-chat-square-text"></i> </div>
+          <h3 class="titulo-tarjeta">Confirmación WhatsApp</h3>
+          <p class="texto-tarjeta">
+            Recibe los detalles de tu reserva instantáneamente en tu teléfono.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="tarjeta-beneficio">
+          <div class="contenedor-icono">
+            <i class="bi bi-shield-check"></i> </div>
+          <h3 class="titulo-tarjeta">Pago Seguro</h3>
+          <p class="texto-tarjeta">
+            Transacciones rápidas para asegurar tu cancha.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <section class="seccion-resenas container py-5 border-top-sutil">
+    
+    <div class="d-flex justify-content-between align-items-end mb-4">
+      <div>
+        <h2 class="titulo-seccion-blanco">Lo que dicen los jugadores</h2>
+        <div class="resumen-estrellas">
+          <span class="puntaje-verde">4.9/5</span>
+          <i class="bi bi-star-fill estrella-neon ms-2"></i>
+          <i class="bi bi-star-fill estrella-neon"></i>
+          <i class="bi bi-star-fill estrella-neon"></i>
+          <i class="bi bi-star-fill estrella-neon"></i>
+          <i class="bi bi-star-fill estrella-neon"></i>
+          <span class="texto-basado ms-2">Basado en +500 reseñas</span>
+        </div>
+      </div>
+      <a href="#formulario-experiencia" class="enlace-comentario">
+        Dejar un comentario <i class="bi bi-arrow-down"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4" *ngFor="let resena of listaResenas">
+        <div class="tarjeta-comentario">
+          
+          <div class="cabecera-jugador d-flex align-items-center mb-3">
+            <div class="circulo-avatar bg-secondary me-3">
+              <i class="bi bi-person-fill text-light" *ngIf="!resena.avatarUrl"></i>
+               <img [src]="resena.avatarUrl" *ngIf="resena.avatarUrl" alt="Avatar" class="img-avatar">
+            </div>
+            <div>
+              <h4 class="nombre-jugador mb-0">{{ resena.nombreJugador }}</h4>
+              <span class="badge-verificado"><i class="bi bi-check-circle-fill"></i> VERIFIED PLAYER</span>
+            </div>
+          </div>
+
+          <div class="estrellas-jugador mb-3">
+            <i class="bi bi-star-fill estrella-neon" *ngFor="let e of estrellasArray | slice:0:resena.calificacion"></i>
+          </div>
+
+          <p class="texto-comentario">{{ resena.comentario }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="formulario-experiencia" class="seccion-formulario container py-5 mt-4 border-top-sutil">
+    <div class="row align-items-center">
+      
+      <div class="col-md-6 pe-md-5 mb-4 mb-md-0">
+        <h2 class="titulo-seccion-blanco mb-3">Comparte tu Experiencia</h2>
+        <p class="texto-delgado-gris mb-5">Tu opinión nos ayuda a mejorar. Cuéntanos qué tal estuvo tu último partido y califica nuestro servicio.</p>
+
+        <div class="item-garantia mb-4 d-flex align-items-start">
+          <div class="icono-circular me-3"><i class="bi bi-trophy"></i></div>
+          <div>
+            <h5 class="titulo-blanco-pequeno">Calidad Garantizada</h5>
+            <p class="texto-delgado-gris m-0">Mantenimiento diario de cada cancha.</p>
+          </div>
+        </div>
+
+        <div class="item-garantia d-flex align-items-start">
+          <div class="icono-circular me-3"><i class="bi bi-clock"></i></div>
+          <div>
+            <h5 class="titulo-blanco-pequeno">Puntualidad</h5>
+            <p class="texto-delgado-gris m-0">Respetamos tus horarios al segundo.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="caja-formulario-oscura">
+          <form (ngSubmit)="enviarResena()">
+            
+            <div class="mb-3">
+              <label class="etiqueta-pequena">NOMBRE COMPLETO</label>
+              <input type="text" class="form-control input-oscuro" name="nombre" [(ngModel)]="formularioResena.nombreJugador" placeholder="Tu nombre" required>
+            </div>
+
+            <div class="mb-3">
+              <label class="etiqueta-pequena d-block">TU CALIFICACIÓN</label>
+              <div class="selector-estrellas-click">
+                <i class="bi fs-4 me-2 cursor-pointer" 
+                   *ngFor="let num of estrellasArray"
+                   [ngClass]="num <= formularioResena.calificacion ? 'bi-star-fill estrella-neon' : 'bi-star estrella-gris'"
+                   (click)="seleccionarEstrella(num)">
+                </i>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <label class="etiqueta-pequena">COMENTARIO</label>
+              <textarea class="form-control input-oscuro" rows="4" name="comentario" [(ngModel)]="formularioResena.comentario" placeholder="¿Cómo fue tu experiencia en Barsa Los Olivos?" required></textarea>
+            </div>
+
+            <button type="submit" class="btn boton-verde-bloque w-100">ENVIAR RESEÑA</button>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+
+

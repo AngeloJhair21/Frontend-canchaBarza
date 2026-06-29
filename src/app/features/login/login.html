@@ -1,0 +1,49 @@
+<div class="pantalla-login d-flex align-items-center justify-content-center">
+  
+  <a routerLink="/inicio" class="btn-volver">
+    <i class="bi bi-arrow-left me-2"></i> VOLVER
+  </a>
+
+  <div class="tarjeta-login">
+    
+    <div class="text-center mb-4">
+      <h2 class="titulo-login">Bienvenido</h2>
+      <p class="subtitulo-login">Ingresa a tu cuenta de Barsa Los Olivos</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="iniciarSesion()">
+      
+      <div class="mb-4">
+        <label class="etiqueta-form-neon">CORREO ELECTRÓNICO</label>
+        <input type="email" class="form-control form-oscuro" formControlName="correo" placeholder="Ingresa tu correo electrónico">
+      </div>
+
+      <div class="mb-2">
+        <label class="etiqueta-form-neon">CONTRASEÑA</label>
+        <div class="input-group grupo-contrasena">
+          <input [type]="mostrarPassword ? 'text' : 'password'" class="form-control form-oscuro border-end-0" formControlName="password" placeholder="••••••••">
+          
+          <button type="button" class="btn boton-ojo border-start-0" (click)="togglePassword()">
+            <i class="bi" [ngClass]="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="text-end mb-4">
+        <a routerLink="/recuperar" class="link-verde-pequeno">¿Olvidaste tu contraseña?</a>
+      </div>
+
+      <button type="submit" class="btn boton-verde-fluido w-100">
+        INICIAR SESIÓN
+      </button>
+
+    </form>
+
+    <div class="divisor-login mt-4 mb-4"></div>
+
+    <p class="texto-footer text-center mb-0">
+      ¿No tienes una cuenta? <a routerLink="/registro" class="link-registro">Crear cuenta</a>
+    </p>
+
+  </div>
+</div>

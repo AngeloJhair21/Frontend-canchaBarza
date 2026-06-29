@@ -1,0 +1,288 @@
+<div class="dashboard-container d-flex">
+  
+  <!-- === SIDEBAR === -->
+  <aside class="sidebar-usuario d-flex flex-column justify-content-between">
+    <div>
+      <div class="brand-perfil mb-5">
+        <h3 class="texto-neon fw-bold">Barsa</h3>
+      </div>
+      <nav class="menu-navegacion">
+        <ul class="list-unstyled">
+          <li class="nav-item">
+            <a routerLink="/perfil"><i class="bi bi-person-fill me-3"></i> Mi perfil</a>
+          </li>
+          <li class="nav-item">
+            <a routerLink="/perfil-reservas"><i class="bi bi-calendar-event me-3"></i> Reservar cancha</a>
+          </li>
+          <!-- Pestaña Activa -->
+          <li class="nav-item active">
+            <a routerLink="/mis-reservas"><i class="bi bi-list-stars me-3"></i> Mis reservas</a>
+          </li>
+          <li class="nav-item">
+            <a href="javascript:void(0)"><i class="bi bi-chat-dots me-3"></i> Chat Soporte</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+    <div class="logout-section">
+      <a routerLink="/inicio" class="nav-item link-salir"><i class="bi bi-box-arrow-left me-3"></i> Salir</a>
+    </div>
+  </aside>
+
+  <!-- === CONTENIDO PRINCIPAL === -->
+  <main class="contenido-reservas flex-grow-1 p-4 p-md-5">
+    
+    <header class="mb-5 animacion-aparecer">
+      <h1 class="titulo-seccion mb-2">Mis Reservas</h1>
+      <p class="texto-delgado-gris">Revisa y gestiona el historial de tus canchas.</p>
+    </header>
+
+    <!-- NAVEGACIÓN DE PESTAÑAS (TABS) -->
+    <div class="tabs-reservas mb-4 animacion-aparecer" style="animation-delay: 0.1s;">
+      <button class="tab-btn" [class.active]="filtroActual === 'Todas'" (click)="aplicarFiltro('Todas')">Todas</button>
+      <button class="tab-btn" [class.active]="filtroActual === 'Pendientes'" (click)="aplicarFiltro('Pendiente')">Pendientes</button>
+      <button class="tab-btn" [class.active]="filtroActual === 'Aprobadas'" (click)="aplicarFiltro('Aprobada')">Aprobadas</button>
+      <button class="tab-btn" [class.active]="filtroActual === 'Terminadas'" (click)="aplicarFiltro('Terminada')">Terminadas</button>
+    </div>
+
+    <!-- CUADRÍCULA DE TARJETAS -->
+    <div class="row g-4">
+      
+      <!-- Mensaje si no hay reservas -->
+      <div class="col-12 animacion-aparecer" *ngIf="reservasMostradas.length === 0">
+        <p class="texto-delgado-gris">No tienes reservas en esta categoría.</p>
+      </div>
+
+      <!-- Tarjeta iterativa -->
+      <div class="col-md-6 col-lg-4 animacion-aparecer" *ngFor="let reserva of reservasMostradas; let i = index" [style.animation-delay]="(0.1 * i) + 's'">
+        <div class="tarjeta-historial h-100 d-flex flex-column">
+          
+          <!-- Etiqueta de Estado -->
+          <div class="mb-4">
+            <span class="badge-estado" 
+                  [ngClass]="{
+                    'badge-aprobada': reserva.estado === 'Aprobada',
+                    'badge-pendiente': reserva.estado === 'Pendiente',
+                    'badge-terminada': reserva.estado === 'Terminada'
+                  }">
+              {{ reserva.estado }}
+            </span>
+          </div>
+
+          <!-- Detalles de la Cancha -->
+          <h4 class="texto-blanco-fuerte mb-3">{{ reserva.deporte }} - {{ reserva.titulo }}</h4>
+          
+          <div class="info-cancha flex-grow-1">
+            <p class="mb-2">{{ reserva.fecha }}</p>
+            <p class="mb-0">{{ reserva.hora }}</p>
+          </div>
+
+          <!-- Divisor -->
+          <div class="divisor-sutil my-4"></div>
+
+          <!-- Footer de la Tarjeta (Pago y Detalles) -->
+          <div class="d-flex justify-content-between align-items-center mt-auto footer-tarjeta">
+            <div class="d-flex align-items-center gap-2">
+              <span class="punto-pago" [class.punto-yape]="reserva.metodoPago.toUpperCase() === 'YAPE'"></span>
+              <span class="metodo-pago-texto text-uppercase">{{ reserva.metodoPago }}</span>
+            </div>
+            <a href="javascript:void(0)" class="link-detalles" (click)="abrirDetalles(reserva)">DETALLES <i class="bi bi-chevron-right ms-1" style="font-size: 0.7rem;"></i></a>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<!-- ========================================== -->
+<!-- MODAL DINÁMICO MULTI-VISTA                 -->
+<!-- ========================================== -->
+<div class="modal-overlay d-flex align-items-center justify-content-center" *ngIf="reservaSeleccionada">
+  <div class="caja-oscura p-4 p-md-5 animacion-aparecer modal-detalles-reserva" style="width: 440px; max-width: 95%;">
+    
+    <div class="d-flex justify-content-between align-items-center border-bottom border-dark pb-3 mb-4">
+      <!-- Título cambia según la vista -->
+      <h4 class="texto-blanco-fuerte m-0" *ngIf="vistaModal === 'DETALLES'">Detalles de Reserva</h4>
+      <h4 class="texto-blanco-fuerte m-0" *ngIf="vistaModal === 'PAGO'">Completar Pago</h4>
+      <h4 class="texto-blanco-fuerte m-0" *ngIf="vistaModal === 'MENSAJE'">Notificación</h4>
+      
+      <button class="btn text-white p-0" (click)="cerrarDetalles()"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- VISTA 1: DETALLES DE LA RESERVA            -->
+    <!-- ========================================== -->
+    <ng-container *ngIf="vistaModal === 'DETALLES'">
+      
+      <div class="d-flex justify-content-between mb-3 align-items-center">
+        <span class="etiqueta-form-neon text-white">ESTADO</span>
+        <span class="badge-estado m-0" [ngClass]="{'badge-aprobada': reservaSeleccionada.estado === 'Aprobada', 'badge-pendiente': reservaSeleccionada.estado === 'Pendiente', 'badge-terminada': reservaSeleccionada.estado === 'Terminada'}">
+          {{ reservaSeleccionada.estado }}
+        </span>
+      </div>
+      
+      <div class="d-flex justify-content-between mb-3"><span class="etiqueta-form-neon text-white">DEPORTE</span><span class="texto-blanco-fuerte small fw-normal">{{ reservaSeleccionada.deporte }}</span></div>
+      <div class="d-flex justify-content-between mb-3"><span class="etiqueta-form-neon text-white">CANCHA</span><span class="texto-blanco-fuerte small fw-normal">{{ reservaSeleccionada.titulo }}</span></div>
+      <div class="d-flex justify-content-between mb-3 text-end"><span class="etiqueta-form-neon text-white">FECHA Y HORA</span><span class="texto-blanco-fuerte small fw-normal">{{ reservaSeleccionada.fecha }}<br>{{ reservaSeleccionada.hora }}</span></div>
+      <div class="d-flex justify-content-between mb-3"><span class="etiqueta-form-neon text-white">MÉTODO DE PAGO</span><span class="texto-blanco-fuerte small fw-normal">{{ reservaSeleccionada.metodoPago }}</span></div>
+      
+      <div class="mt-4 mb-4" *ngIf="reservaSeleccionada.estado === 'Pendiente'">
+        <label class="etiqueta-form-neon text-white mb-3">SERVICIOS ADICIONALES (S/ 5.00 C/U)</label>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="texto-delgado-gris small">Chalecos</span>
+          <div class="form-check form-switch"><input class="form-check-input switch-neon" type="checkbox" [(ngModel)]="extrasPendiente.chalecos" (change)="calcularTotalDinamico()"></div>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="texto-delgado-gris small">Balón Profesional</span>
+          <div class="form-check form-switch"><input class="form-check-input switch-neon" type="checkbox" [(ngModel)]="extrasPendiente.balon" (change)="calcularTotalDinamico()"></div>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="texto-delgado-gris small">Banderines</span>
+          <div class="form-check form-switch"><input class="form-check-input switch-neon" type="checkbox" [(ngModel)]="extrasPendiente.banderines" (change)="calcularTotalDinamico()"></div>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between mb-4 mt-4">
+        <span class="etiqueta-form-neon text-white">MONTO TOTAL</span>
+        <span class="texto-blanco-fuerte text-neon" style="font-size: 1.3rem;">S/ {{ montoTotalDinamico | number:'1.2-2' }}</span>
+      </div>
+      <div class="border-top border-dark my-4"></div>
+
+      <div class="mb-4">
+        <div class="d-flex justify-content-between align-items-end mb-2">
+          <label class="etiqueta-form-neon text-white m-0">TU MENSAJE</label>
+          <button *ngIf="reservaSeleccionada.estado !== 'Terminada'" class="btn btn-outline-neon py-0 px-2" (click)="guardarComentario()">Guardar</button>
+        </div>
+        <textarea class="form-control form-comentario" [ngClass]="{'editable': reservaSeleccionada.estado !== 'Terminada'}" rows="2" 
+                  [readonly]="reservaSeleccionada.estado === 'Terminada'" 
+                  placeholder="Escribe aquí para coordinar con el admin..." 
+                  [(ngModel)]="nuevoComentario"></textarea>
+      </div>
+
+      <div class="mb-4" *ngIf="reservaSeleccionada.respuestaAdmin">
+        <label class="etiqueta-form-neon text-white mb-2">RESPUESTA DEL ADMIN</label>
+        <textarea class="form-control form-comentario form-admin" rows="2" readonly>{{ reservaSeleccionada.respuestaAdmin }}</textarea>
+      </div>
+
+      <div class="d-flex gap-2 mt-4" *ngIf="reservaSeleccionada.estado === 'Pendiente'">
+        
+        <button class="btn btn-peligro flex-grow-1 d-flex flex-column align-items-center justify-content-center py-2" (click)="cancelarReservaPendiente()">
+          <span>Cancelar</span>
+          <small class="fw-normal">Penalidad S/ 10.00</small>
+        </button>
+        
+        <button class="btn boton-verde-fluido flex-grow-1 fw-bold animacion-aparecer" 
+                *ngIf="extrasPendiente.chalecos || extrasPendiente.balon || extrasPendiente.banderines" 
+                (click)="irAPagar()">
+          Proceder a Pagar
+        </button>
+
+      </div>
+
+      <button *ngIf="reservaSeleccionada.estado !== 'Pendiente'" class="btn boton-verde-fluido w-100 py-3 mt-2" (click)="cerrarDetalles()">Entendido</button>
+
+    </ng-container>
+
+<!-- ========================================== -->
+    <!-- VISTA 2: FORMULARIO DE PAGO IDÉNTICO       -->
+    <!-- ========================================== -->
+    <ng-container *ngIf="vistaModal === 'PAGO'">
+      
+      <!-- Toggle Tarjeta / Yape -->
+      <div class="d-flex gap-2 mb-4 mt-2">
+        <button class="btn btn-metodo-pago flex-grow-1" [class.activa]="metodoPago === 'TARJETA'" (click)="metodoPago = 'TARJETA'">
+          <i class="bi bi-credit-card-2-front me-2"></i> Tarjeta
+        </button>
+        <button class="btn btn-metodo-pago flex-grow-1" [class.activa]="metodoPago === 'YAPE'" (click)="metodoPago = 'YAPE'">
+          <i class="bi bi-phone me-2"></i> Yape / Plin
+        </button>
+      </div>
+
+      <!-- FORMULARIO TARJETA -->
+      <div *ngIf="metodoPago === 'TARJETA'" class="animacion-aparecer">
+        <div class="mb-3">
+          <label class="etiqueta-form-neon mb-2">Nombre del Banco</label>
+          <input type="text" class="form-control form-pago" placeholder="Ej: BCP, BBVA, Interbank" [(ngModel)]="datosPago.banco" (input)="validarLetras('banco', $event)">
+        </div>
+        <div class="mb-3">
+          <label class="etiqueta-form-neon mb-2">Nombre del Titular</label>
+          <input type="text" class="form-control form-pago" placeholder="Tal como aparece en la tarjeta" [(ngModel)]="datosPago.titular" (input)="validarLetras('titular', $event)">
+        </div>
+        <div class="mb-3">
+          <label class="etiqueta-form-neon mb-2">Número de Tarjeta</label>
+          <input type="text" class="form-control form-pago" placeholder="0000 0000 0000 0000" maxlength="19" [(ngModel)]="datosPago.tarjeta" (input)="formatearTarjeta($event)">
+        </div>
+        <div class="row g-3 mb-4">
+          <div class="col-6">
+            <label class="etiqueta-form-neon mb-2">Caducidad</label>
+            <input type="text" class="form-control form-pago" placeholder="MM/AA" maxlength="5" [(ngModel)]="datosPago.caducidad" (input)="formatearCaducidad($event)">
+          </div>
+          <div class="col-6">
+            <label class="etiqueta-form-neon mb-2">CVV</label>
+            <input type="password" class="form-control form-pago" placeholder="***" maxlength="4" [(ngModel)]="datosPago.cvv" (input)="formatearNumeros('cvv', 4, $event)">
+          </div>
+        </div>
+      </div>
+
+      <!-- VISTA YAPE -->
+      <div *ngIf="metodoPago === 'YAPE'" class="animacion-aparecer text-center py-3">
+        <div class="qr-placeholder mb-3">
+          <!-- Asegúrate de tener tu imagen en esta ruta -->
+          <img src="imagenes/qr-yape" alt="Código QR Yape">
+        </div>
+        <p class="texto-blanco-fuerte mb-1">Escanea el QR o yapea al:</p>
+        <h3 class="texto-neon fw-bold mb-4">987 654 321</h3>
+        
+        <div class="text-start mb-4">
+          <label class="etiqueta-form-neon mb-2">Número de Operación</label>
+          <input type="text" class="form-control form-pago text-center" placeholder="Ingresa los 6 dígitos de tu voucher" maxlength="8"
+                 [(ngModel)]="datosPago.operacionYape" (input)="formatearNumeros('operacionYape', 8, $event)">
+        </div>
+      </div>
+
+      <div class="border-top border-dark my-4"></div>
+
+      <!-- Footer del Pago -->
+      <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+          <p class="texto-delgado-gris small mb-1">MONTO TOTAL</p>
+          <!-- COBRAMOS SOLO EL MONTO EXTRA (Ej: S/ 10.00) -->
+          <h2 class="texto-neon fw-bold mb-0">S/ {{ montoSoloExtras | number:'1.2-2' }}</h2>
+        </div>
+        <div class="text-end">
+          <p class="texto-delgado-gris small mb-1">ID de Transacción</p>
+          <p class="text-white small mb-0">{{ idTransaccion }}</p>
+        </div>
+      </div>
+
+      <button class="btn boton-verde-fluido w-100 py-3 mb-3" (click)="confirmarPago()">Confirmar Pago</button>
+      
+      <!-- Footer inferior: Volver y Candado de seguridad -->
+      <div class="d-flex justify-content-between align-items-center">
+        <button class="btn text-white p-0 m-0 text-decoration-underline" style="font-size: 0.8rem; opacity: 0.7;" (click)="vistaModal = 'DETALLES'">Volver atrás</button>
+        <p class="text-end texto-delgado-gris mb-0 m-0" style="font-size: 0.7rem;">
+          <i class="bi bi-lock-fill me-1"></i> Pago Encriptado y Seguro
+        </p>
+      </div>
+    </ng-container>
+
+    <!-- ========================================== -->
+    <!-- VISTA 3: MENSAJE FINAL DE ÉXITO            -->
+    <!-- ========================================== -->
+    <ng-container *ngIf="vistaModal === 'MENSAJE'">
+      <div class="text-center py-4 animacion-aparecer">
+        <i class="bi bi-check-circle-fill texto-neon mb-3" style="font-size: 3rem;"></i>
+        <h5 class="text-white fw-bold mb-3">¡Proceso Exitoso!</h5>
+        <p class="texto-delgado-gris mb-4">{{ mensajeNotificacion }}</p>
+        <button class="btn boton-verde-fluido w-100 py-3" (click)="cerrarDetalles()">Cerrar y volver</button>
+      </div>
+    </ng-container>
+
+  </div>
+</div>
+
+
+

@@ -1,0 +1,92 @@
+<div class="pantalla-login d-flex align-items-center justify-content-center">
+  <a *ngIf="pasoActual !== 4" routerLink="/login" class="btn-volver">
+    <i class="bi bi-arrow-left me-2"></i> VOLVER
+  </a>
+
+  <div class="tarjeta-login">
+    
+    <div *ngIf="pasoActual === 1" class="animacion-aparecer">
+      <div class="text-center mb-4">
+        <h2 class="titulo-login">Recuperar Contraseña</h2>
+        <p class="subtitulo-login">Ingresa tu correo para recibir el código.</p>
+      </div>
+      <form [formGroup]="recuperarForm">
+        <div class="mb-4">
+          <label class="etiqueta-form-neon">CORREO ELECTRÓNICO</label>
+          <input type="email" class="form-control form-oscuro" formControlName="correo" placeholder="INGRESA TU CORREO">
+        </div>
+        <button type="button" class="btn boton-verde-fluido w-100" (click)="enviarCodigo()">ENVIAR CÓDIGO</button>
+      </form>
+    </div>
+
+    <div *ngIf="pasoActual === 2" class="animacion-aparecer">
+      <div class="text-center mb-4">
+        <h2 class="titulo-login">Verificar Código</h2>
+        <p class="subtitulo-login">Ingresa el código enviado a tu Gmail.</p>
+      </div>
+      <form [formGroup]="recuperarForm">
+        <div class="d-flex justify-content-center gap-2 mb-4">
+          <input #d1 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d1" (keyup)="moverFoco($event, d2, null)">
+          <input #d2 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d2" (keyup)="moverFoco($event, d3, d1)">
+          <input #d3 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d3" (keyup)="moverFoco($event, d4, d2)">
+          <input #d4 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d4" (keyup)="moverFoco($event, d5, d3)">
+          <input #d5 type="text" maxlength="1" class="caja-digito form-oscuro text-center" formControlName="d5" (keyup)="moverFoco($event, null, d4)">
+        </div>
+        <button type="button" class="btn boton-verde-fluido w-100" (click)="verificarCodigo()">VERIFICAR CÓDIGO</button>
+      </form>
+    </div>
+
+    <div *ngIf="pasoActual === 3" class="animacion-aparecer">
+      <div class="text-center mb-4">
+        <h2 class="titulo-login">Nueva Contraseña</h2>
+        <p class="subtitulo-login">Crea una contraseña segura para tu cuenta.</p>
+      </div>
+      <form [formGroup]="recuperarForm" (ngSubmit)="restablecerContrasena()">
+        
+        <div class="mb-3">
+          <label class="etiqueta-form-neon">NUEVA CONTRASEÑA</label>
+          <div class="input-group">
+            <input [type]="mostrarClave ? 'text' : 'password'" class="form-control form-oscuro border-end-0" formControlName="nuevaPassword" placeholder="••••••••">
+            <button type="button" class="btn boton-ojo border-start-0" (click)="toggleClave()">
+              <i class="bi" [ngClass]="mostrarClave ? 'bi-eye-slash' : 'bi-eye'"></i>
+            </button>
+          </div>
+          <small class="text-danger mt-2 d-block" *ngIf="recuperarForm.get('nuevaPassword')?.hasError('pattern') && recuperarForm.get('nuevaPassword')?.touched">
+            * Requiere mín. 8 caracteres, 1 mayúscula, 1 símbolo especial (!@#$%) y sin espacios.
+          </small>
+        </div>
+
+        <div class="mb-4">
+          <label class="etiqueta-form-neon">CONFIRMAR CONTRASEÑA</label>
+          <div class="input-group">
+            <input [type]="mostrarConfirmarClave ? 'text' : 'password'" class="form-control form-oscuro border-end-0" formControlName="confirmarPassword" placeholder="••••••••">
+            <button type="button" class="btn boton-ojo border-start-0" (click)="toggleConfirmarClave()">
+              <i class="bi" [ngClass]="mostrarConfirmarClave ? 'bi-eye-slash' : 'bi-eye'"></i>
+            </button>
+          </div>
+          <small class="text-danger mt-2 d-block" *ngIf="recuperarForm.hasError('noCoincide') && recuperarForm.get('confirmarPassword')?.touched">
+            * Las contraseñas no coinciden.
+          </small>
+        </div>
+
+        <button type="submit" class="btn boton-verde-fluido w-100" [disabled]="recuperarForm.invalid || recuperarForm.hasError('noCoincide')">
+          RESTABLECER CONTRASEÑA
+        </button>
+      </form>
+    </div>
+
+    <div *ngIf="pasoActual === 4" class="animacion-aparecer text-center py-3">
+      <div class="mb-4">
+        <i class="bi bi-check-circle-fill texto-neon" style="font-size: 5.5rem;"></i>
+      </div>
+      <h2 class="titulo-login">¡Contraseña Establecida!</h2>
+      <p class="subtitulo-login mt-3 mb-5 px-3">
+        Tu seguridad ha sido actualizada con éxito. Ya puedes seguir usando tu cuenta para reservar canchas.
+      </p>
+      <button type="button" class="btn boton-verde-fluido w-100" (click)="irALaCuenta()">
+        SEGUIR CON LA CUENTA
+      </button>
+    </div>
+
+  </div>
+</div>

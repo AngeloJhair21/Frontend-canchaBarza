@@ -1,0 +1,408 @@
+/* VARIABLES GLOBALES PARA ESTE COMPONENTE */
+$color-fondo-oscuro: #121212;
+$color-verde-neon: #ccff00; /* Ajusta este código si tu verde es más claro/oscuro */
+$color-texto-blanco: #ffffff;
+$color-texto-gris: #b3b3b3;
+
+.contenedor-inicio {
+  background-color: $color-fondo-oscuro;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* === 1. BARRA DE NAVEGACIÓN === */
+.barra-navegacion {
+  background-color: rgba(18, 18, 18, 0.8); /* Fondo semi-transparente */
+  backdrop-filter: blur(10px); /* Efecto vidrio moderno */
+  padding: 1.5rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+  .logo-barsa {
+    color: $color-verde-neon;
+    font-weight: 800;
+    font-size: 1.8rem;
+    letter-spacing: -1px;
+  }
+
+  .lista-enlaces {
+    gap: 2rem;
+    
+    .enlace-delgado {
+      color: $color-texto-gris;
+      font-weight: 300; /* Letra delgada como pediste */
+      transition: color 0.3s;
+      
+      &:hover { color: $color-texto-blanco; }
+    }
+
+    .enlace-activo {
+      color: $color-verde-neon;
+      font-weight: 400;
+      border-bottom: 2px solid $color-verde-neon;
+    }
+  }
+
+  .botones-accion-nav {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+
+    .enlace-login {
+      color: $color-texto-blanco;
+      text-decoration: none;
+      font-weight: 400;
+      &:hover { color: $color-verde-neon; }
+    }
+
+    .boton-verde-redondeado {
+      background-color: $color-verde-neon;
+      color: #000;
+      border-radius: 30px;
+      padding: 0.5rem 1.5rem;
+      font-weight: 600;
+      border: none;
+    }
+  }
+}
+
+/* === 2. SECCIÓN HERO Y CARRUSEL === */
+.seccion-hero {
+  position: relative;
+  height: 100vh; /* Ocupa toda la pantalla */
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+
+  /* El carrusel se queda de fondo absolute */
+  .carrusel-absoluto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+
+    .imagen-fondo {
+      height: 100vh;
+      object-fit: cover; /* Para que la imagen no se deforme */
+    }
+
+    /* Le ponemos una capa oscura encima a las fotos para que el texto se lea bien */
+    .capa-oscura::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(to right, rgba(18,18,18,0.9) 20%, rgba(18,18,18,0.4) 100%);
+      z-index: 2;
+    }
+  }
+
+  /* Contenido por encima del carrusel */
+  .contenido-superpuesto {
+    position: relative;
+    z-index: 10;
+    padding-top: 80px; /* Espacio para el navbar */
+
+    .cuadro-texto {
+      max-width: 600px;
+      
+      .etiqueta-premium {
+        display: inline-block;
+        border: 1px solid $color-verde-neon;
+        color: $color-verde-neon;
+        border-radius: 20px;
+        padding: 0.3rem 1rem;
+        font-size: 0.8rem;
+        letter-spacing: 2px;
+        margin-bottom: 1.5rem;
+      }
+
+      .titulo-principal {
+        color: $color-texto-blanco;
+        font-size: 4.5rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 1.5rem;
+
+        .texto-verde { color: $color-verde-neon; }
+      }
+
+      .subtitulo-delgado {
+        color: $color-texto-gris;
+        font-weight: 300; /* Letra delgada */
+        font-size: 1.1rem;
+        margin-bottom: 2.5rem;
+      }
+
+      /* Botón con efecto de brillo (Glow) */
+      .boton-verde-brillante {
+        background-color: $color-verde-neon;
+        color: #000;
+        border-radius: 30px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        font-size: 1.1rem;
+        border: none;
+        box-shadow: 0 0 20px rgba(204, 255, 0, 0.4); /* El resplandor de tu imagen */
+        transition: all 0.3s;
+
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 0 30px rgba(204, 255, 0, 0.6);
+        }
+
+        .flecha { margin-left: 10px; }
+      }
+    }
+  }
+
+  /* Botones inferiores del Carrusel */
+  .controles-carrusel {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 1rem;
+
+    .btn-control {
+      background-color: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: $color-texto-blanco;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+
+      &:hover {
+        border-color: $color-verde-neon;
+        color: $color-verde-neon;
+      }
+    }
+  }
+}
+
+/* === 3. SECCIÓN DE BENEFICIOS === */
+.seccion-beneficios {
+  margin-top: 5rem;
+  margin-bottom: 5rem;
+
+  /* Títulos centrados */
+  .titulo-seccion {
+    color: $color-texto-blanco;
+    font-weight: 600;
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitulo-seccion {
+    color: $color-texto-gris;
+    font-weight: 300; /* Letra delgada */
+    font-size: 1.1rem;
+  }
+
+  /* Estilos de las tarjetas */
+  .tarjeta-beneficio {
+    background-color: #1a1a1a; /* Gris muy oscuro, casi negro */
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Borde sutil blanco transparente */
+    border-radius: 12px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    height: 100%;
+    transition: transform 0.3s ease, border-color 0.3s ease;
+
+    /* Efecto al pasar el mouse por encima (Hover) */
+    &:hover {
+      transform: translateY(-8px); /* Se levanta un poco */
+      border-color: rgba(204, 255, 0, 0.4); /* El borde brilla en verde */
+    }
+
+    /* Círculo con borde verde que envuelve al ícono */
+    .contenedor-icono {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: 1px solid $color-verde-neon;
+      margin-bottom: 1.5rem;
+
+      i {
+        color: $color-verde-neon;
+        font-size: 1.5rem;
+      }
+    }
+
+    .titulo-tarjeta {
+      color: $color-texto-blanco;
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .texto-tarjeta {
+      color: $color-texto-gris;
+      font-size: 0.95rem;
+      font-weight: 300; /* Letra delgada */
+      line-height: 1.6;
+      margin-bottom: 0;
+    }
+  }
+}
+/* === LÍNEAS DIVISORIAS SUTILES === */
+.border-top-sutil {
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* === 4. SECCIÓN RESEÑAS === */
+.titulo-seccion-blanco {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 2rem;
+}
+
+.puntaje-verde {
+  color: $color-verde-neon;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.estrella-neon { color: $color-verde-neon; }
+.estrella-gris { color: #444; }
+
+.texto-basado {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.enlace-comentario {
+  color: $color-verde-neon;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  &:hover { color: #fff; }
+}
+
+.tarjeta-comentario {
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1.8rem;
+  height: 100%;
+
+  .circulo-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    
+    .img-avatar {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
+
+  .nombre-jugador {
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .badge-verificado {
+    color: $color-verde-neon;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .texto-comentario {
+    color: #b3b3b3;
+    font-weight: 300;
+    font-size: 0.95rem;
+    font-style: italic;
+  }
+}
+
+/* === 5. SECCIÓN FORMULARIO === */
+.texto-delgado-gris {
+  color: #b3b3b3;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+.icono-circular {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid $color-verde-neon;
+  color: $color-verde-neon;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+}
+
+.titulo-blanco-pequeno {
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.2rem;
+}
+
+.caja-formulario-oscura {
+  background-color: #1a1a1a;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 2.5rem;
+
+  .etiqueta-pequena {
+    color: #888;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+  }
+
+  /* Input personalizado para modo oscuro */
+  .input-oscuro {
+    background-color: #121212;
+    border: 1px solid #333;
+    color: #fff;
+    font-weight: 300;
+    border-radius: 6px;
+    padding: 0.8rem 1rem;
+
+    &:focus {
+      background-color: #121212;
+      border-color: $color-verde-neon;
+      box-shadow: none;
+      color: #fff;
+    }
+    
+    &::placeholder { color: #555; }
+  }
+
+  .cursor-pointer { cursor: pointer; }
+
+  .boton-verde-bloque {
+    background-color: $color-verde-neon;
+    color: #000;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 0.8rem;
+    border-radius: 6px;
+    border: none;
+    transition: transform 0.2s;
+
+    &:hover { transform: scale(1.02); }
+  }
+}

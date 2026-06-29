@@ -1,0 +1,136 @@
+$color-verde-neon: #ccff00;
+$color-fondo-cajas: #1a1a1a;
+$color-bordes: #2d2d2d;
+
+/* Contenedor de la página con fondo negro absoluto y espacio para la barra de navegación */
+.contenedor-reservas {
+  background-color: #121212;
+  min-height: 100vh;
+  padding-top: 100px !important; /* Espacio para que el menú de arriba no tape el título */
+}
+
+.titulo-blanco {
+  color: #fff;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+
+.texto-delgado-gris {
+  color: #888;
+  font-weight: 300;
+  font-size: 0.9rem;
+}
+
+/* === DISEÑO DE FILTROS COMPACTOS === */
+.caja-filtros {
+  background-color: $color-fondo-cajas;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+
+  .etiqueta-filtro {
+    color: #666;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+  }
+
+  .opcion-cuadro {
+    flex: 1;
+    background-color: #121212;
+    border: 1px solid $color-bordes;
+    border-radius: 8px;
+    padding: 0.8rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #555;
+    cursor: pointer;
+    
+    span { font-size: 0.85rem; font-weight: 400; }
+    &.activo { border-color: $color-verde-neon; color: $color-verde-neon; }
+  }
+
+  .btn-pildora {
+    background-color: #121212;
+    border: 1px solid $color-bordes;
+    color: #666;
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+
+    &.activo { background-color: $color-verde-neon; color: #000; border-color: $color-verde-neon; font-weight: 600; }
+  }
+}
+
+/* === CONTENEDOR DEL CALENDARIO === */
+.caja-calendario-oscura {
+  background-color: $color-fondo-cajas;
+  border-radius: 12px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.03);
+
+  .leyenda-calendario .item-leyenda {
+    color: #666;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    
+    .punto {
+      width: 6px; height: 6px; border-radius: 50%;
+      &.verde { background-color: $color-verde-neon; }
+      &.gris { background-color: #444; }
+    }
+  }
+}
+
+/* === REDUCIENDO EL TAMAÑO INTERNO DE FULLCALENDAR === */
+::ng-deep .fc {
+  --fc-page-bg-color: transparent;
+  --fc-neutral-bg-color: #1a1a1a;
+  --fc-border-color: #2d2d2d;
+  --fc-button-text-color: #fff;
+  --fc-button-bg-color: transparent;
+  --fc-button-border-color: transparent;
+  --fc-button-hover-bg-color: #2a2a2a;
+  --fc-today-bg-color: rgba(204, 255, 0, 0.02);
+
+  /* Título del Mes más chico */
+  .fc-toolbar-title {
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    text-transform: capitalize;
+  }
+
+  /* Días de la semana más chicos */
+  .fc-col-header-cell-cushion {
+    color: #555;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 0;
+  }
+
+  /* Números de los días reducidos */
+  .fc-daygrid-day-number {
+    color: #888;
+    font-size: 0.8rem;
+    padding: 4px 8px;
+    text-decoration: none;
+  }
+
+  /* 👇 AQUÍ LOGRAMOS ACHICAR EL CALENDARIO 👇 */
+  /* Reducimos la altura de cada cuadro de fecha de 100px a solo 65px */
+  .fc-daygrid-day-frame {
+    min-height: 65px !important; 
+  }
+
+  /* El recuadro del día actual */
+  .fc-day-today .fc-daygrid-day-frame {
+    border: 1px solid $color-verde-neon !important;
+  }
+}
