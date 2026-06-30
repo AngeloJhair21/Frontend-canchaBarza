@@ -1,0 +1,90 @@
+<div class="dashboard-container d-flex">
+  
+  <aside class="sidebar-usuario d-flex flex-column justify-content-between">
+    <div>
+      <div class="brand-perfil mb-5">
+        <h3 class="texto-neon fw-bold">Barsa</h3>
+      </div>
+      <nav class="menu-navegacion">
+        <ul class="list-unstyled">
+          <li class="nav-item"><a routerLink="/perfil"><i class="bi bi-person-fill me-3"></i> Mi perfil</a></li>
+          <li class="nav-item"><a routerLink="/perfil-reservas"><i class="bi bi-calendar-event me-3"></i> Reservar cancha</a></li>
+          <li class="nav-item"><a routerLink="/mis-reservas"><i class="bi bi-list-stars me-3"></i> Mis reservas</a></li>
+          <li class="nav-item active"><a routerLink="/chat-soporte"><i class="bi bi-chat-dots me-3"></i> Chat Soporte</a></li>
+        </ul>
+      </nav>
+    </div>
+    <div class="logout-section">
+      <a routerLink="/inicio" class="nav-item link-salir"><i class="bi bi-box-arrow-left me-3"></i> Salir</a>
+    </div>
+  </aside>
+
+  <main class="contenido-chat flex-grow-1 d-flex flex-column p-4">
+    
+    <header class="chat-header d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-dark">
+      <div>
+        <h3 class="texto-blanco-fuerte m-0">Asistente Virtual</h3>
+        <div class="d-flex align-items-center mt-1">
+          <span class="punto-en-linea me-2"></span>
+          <span class="texto-delgado-gris small m-0">En línea</span>
+        </div>
+      </div>
+      
+    </header>
+
+    <div class="chat-mensajes flex-grow-1 pe-2 mb-4" #scrollChat>
+      
+      <div class="text-center mb-4"><span class="badge badge-fecha">Hoy</span></div>
+
+      <div *ngFor="let msg of mensajes" class="mensaje-fila d-flex mb-4" [ngClass]="{'justify-content-end': msg.emisor === 'usuario'}">
+        
+        <div class="avatar-bot me-3 mt-auto" *ngIf="msg.emisor === 'bot'">B</div>
+
+        <div class="mensaje-burbuja" [ngClass]="msg.emisor === 'usuario' ? 'burbuja-usuario' : 'burbuja-bot'">
+          
+          <p class="m-0" [ngClass]="msg.emisor === 'usuario' ? 'texto-blanco-fuerte' : 'text-light'" style="font-size: 0.95rem;">
+            {{ msg.texto }}
+          </p>
+
+          <div class="tarjetas-respuesta mt-3" *ngIf="msg.tipo === 'canchas'">
+            <div class="tarjeta-cancha-bot d-flex justify-content-between align-items-center p-3 mb-2 rounded" *ngFor="let cancha of msg.opciones">
+              <span class="texto-blanco-fuerte m-0">{{ cancha.nombre }}</span>
+              <span class="texto-neon fw-bold small m-0">{{ cancha.horario }}</span>
+            </div>
+            <p class="text-light mt-3 mb-0" style="font-size: 0.95rem;">{{ msg.textoFooter }}</p>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="mensaje-fila d-flex mb-4 animacion-aparecer" *ngIf="estaEscribiendo">
+        <div class="avatar-bot me-3 mt-auto">B</div>
+        <div class="burbuja-bot d-flex align-items-center">
+          <div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="chat-input-area mt-auto">
+      
+      <div class="preguntas-rapidas d-flex gap-2 mb-3 overflow-auto pb-1">
+        <button class="btn btn-pill-oscuro text-nowrap" *ngFor="let pregunta of preguntasRapidas" (click)="enviarMensajeRapido(pregunta)">
+          {{ pregunta }}
+        </button>
+      </div>
+
+      <div class="caja-input-chat d-flex gap-3">
+        <input type="text" class="form-control input-oscuro flex-grow-1" placeholder="Escribe tu mensaje aquí..." 
+               [(ngModel)]="nuevoMensaje" (keyup.enter)="enviarMensaje()">
+        <button class="btn boton-verde-fluido px-4" (click)="enviarMensaje()">Enviar</button>
+      </div>
+      
+      <p class="text-center mt-3 mb-0 texto-delgado-gris" style="font-size: 0.65rem;">
+        La IA de Barsa puede cometer errores. Verifica la información de reservas.
+      </p>
+
+    </div>
+
+  </main>
+</div>

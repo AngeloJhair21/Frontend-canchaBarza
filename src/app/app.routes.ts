@@ -9,6 +9,7 @@ import { RegistroComponent } from './features/registro/registro';
 import { PerfilComponent } from './features/perfil/perfil';
 import { PerfilReservasComponent } from './features/perfil-reservas/perfil-reservas';
 import { MisReservasComponent } from './features/mis-reservas/mis-reservas';
+import { ChatSoporteComponent } from './features/chat-soporte/chat-soporte';
 
 export const routes: Routes = [
   // 1. Cuando la URL esté vacía (localhost:4200), redirigir a 'inicio'
@@ -43,6 +44,9 @@ export const routes: Routes = [
 
   // 11. Ruta para las reservas del usuario
   { path: 'mis-reservas', component: MisReservasComponent },
+
+  // 12. Ruta para el chat de soporte
+  { path: 'chat-soporte', component: ChatSoporteComponent },
 
   // Ruta comodín (¡SIEMPRE AL FINAL DEL ARREGLO!)
   { path: '**', redirectTo: 'inicio' }
